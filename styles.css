@@ -1,0 +1,1084 @@
+/* ============================================================
+ *  Valentine's Day Proposal Website — Stylesheet
+ *  Three-stage SPA: CAPTCHA → Proposal → Congratulations
+ * ============================================================ */
+
+/* ── Google Fonts ─────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
+
+/* ── Design Tokens ────────────────────────────────────────── */
+:root {
+  /* Primary palette */
+  --romantic-red: #E63946;
+  --soft-pink: #FFD6E8;
+  --warm-accent: #FF6B9D;
+  --blush: #FFB3BA;
+  --deep-rose: #C2185B;
+
+  /* Supporting */
+  --white: #FFFFFF;
+  --light-bg: #FFF5F7;
+  --text-primary: #2C3E50;
+  --text-secondary: #6B7280;
+  --text-light: #FFFFFF;
+
+  /* Gradients */
+  --gradient-romantic: linear-gradient(135deg, #FFB3BA 0%, #FF6B9D 50%, #E63946 100%);
+  --gradient-warm: linear-gradient(135deg, #FFF5F7 0%, #FFD6E8 100%);
+  --gradient-celebration: linear-gradient(135deg, #1a0a14 0%, #2d0f1f 30%, #4a1133 60%, #3d0d29 100%);
+  --gradient-captcha: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --shadow-glow: 0 0 30px rgba(230, 57, 70, 0.3);
+  --shadow-pink-glow: 0 0 40px rgba(255, 107, 157, 0.4);
+
+  /* Transitions */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --transition-fast: 200ms var(--ease-smooth);
+  --transition-base: 300ms var(--ease-smooth);
+  --transition-slow: 500ms var(--ease-smooth);
+
+  /* Borders */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+  --space-2xl: 64px;
+}
+
+/* ── Reset & Base ─────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: var(--light-bg);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+/* ── Utility: Screen-reader only ──────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* ── Page Wrapper (SPA container) ─────────────────────────── */
+.page {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 600ms var(--ease-smooth), visibility 0s 600ms;
+  z-index: 1;
+}
+
+.page.active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 600ms var(--ease-smooth), visibility 0s 0s;
+  z-index: 10;
+}
+
+/* ================================================================
+ *  PAGE 1 — CAPTCHA CHALLENGE
+ * ================================================================ */
+.captcha-page {
+  background: var(--gradient-captcha);
+}
+
+.captcha-container {
+  width: 90%;
+  max-width: 420px;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-xl);
+  animation: slideUp 700ms var(--ease-smooth) both;
+}
+
+/* CAPTCHA header strip */
+.captcha-header {
+  background: var(--gradient-romantic);
+  color: var(--text-light);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  margin: calc(var(--space-xl) * -1) calc(var(--space-xl) * -1) var(--space-lg);
+  text-align: center;
+}
+
+.captcha-header h1 {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-xs);
+}
+
+.captcha-header p {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.captcha-challenge {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: var(--space-lg);
+  line-height: 1.5;
+}
+
+.captcha-highlight {
+  color: var(--warm-accent);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+/* Image Grid */
+.captcha-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: var(--space-lg);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 2px solid #e5e7eb;
+}
+
+.captcha-cell {
+  position: relative;
+  aspect-ratio: 1;
+  cursor: pointer;
+  overflow: hidden;
+  transition: var(--transition-fast);
+}
+
+.captcha-cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-base);
+}
+
+.captcha-cell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(230, 57, 70, 0);
+  transition: background var(--transition-fast);
+  pointer-events: none;
+}
+
+.captcha-cell:hover img {
+  transform: scale(1.05);
+}
+
+.captcha-cell:hover::after {
+  background: rgba(230, 57, 70, 0.08);
+}
+
+/* Selected state */
+.captcha-cell.selected {
+  outline: 3px solid var(--romantic-red);
+  outline-offset: -3px;
+}
+
+.captcha-cell.selected::after {
+  background: rgba(230, 57, 70, 0.15);
+}
+
+.captcha-cell .check-overlay {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 26px;
+  height: 26px;
+  background: var(--romantic-red);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+  z-index: 2;
+}
+
+.captcha-cell .check-overlay svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: var(--white);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.captcha-cell.selected .check-overlay {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Verify button */
+.captcha-verify-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--romantic-red);
+  color: var(--text-light);
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.captcha-verify-btn:hover:not(:disabled) {
+  background: var(--deep-rose);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-glow);
+}
+
+.captcha-verify-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.captcha-verify-btn:disabled {
+  background: #d1d5db;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Error message */
+.captcha-error {
+  text-align: center;
+  color: var(--romantic-red);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: var(--space-md);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.captcha-error.visible {
+  opacity: 1;
+}
+
+/* Hint after 3 failures */
+.captcha-hint {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-style: italic;
+  margin-top: var(--space-sm);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.captcha-hint.visible {
+  opacity: 1;
+}
+
+/* reCAPTCHA-style footer */
+.captcha-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid #f0f0f0;
+}
+
+.captcha-footer-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.captcha-footer-brand .heart-icon {
+  font-size: 1.2rem;
+}
+
+.captcha-footer-brand span {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.captcha-footer-links {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.captcha-footer-links a {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+/* Shake animation for wrong answer */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-6px); }
+  20%, 40%, 60%, 80% { transform: translateX(6px); }
+}
+
+.captcha-container.shake {
+  animation: shake 500ms var(--ease-smooth);
+}
+
+/* ================================================================
+ *  PAGE 2 — VALENTINE PROPOSAL
+ * ================================================================ */
+.proposal-page {
+  background: var(--gradient-romantic);
+  overflow: hidden;
+}
+
+/* Floating Hearts Background */
+.hearts-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.floating-heart {
+  position: absolute;
+  bottom: -80px;
+  font-size: 1.5rem;
+  opacity: 0;
+  animation: floatUp linear infinite;
+  pointer-events: none;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: translateY(0) rotate(0deg) scale(0.5);
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-110vh) rotate(360deg) scale(1.2);
+  }
+}
+
+/* Proposal content */
+.proposal-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: var(--space-xl);
+  max-width: 600px;
+}
+
+.proposal-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 7vw, 4rem);
+  font-weight: 700;
+  color: var(--white);
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+  margin-bottom: var(--space-md);
+  animation: fadeInScale 800ms var(--ease-smooth) 200ms both;
+}
+
+.proposal-subtext {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 300;
+  margin-bottom: var(--space-2xl);
+  animation: fadeIn 800ms var(--ease-smooth) 600ms both;
+}
+
+/* Proposal Buttons */
+.proposal-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+  animation: fadeIn 800ms var(--ease-smooth) 1000ms both;
+}
+
+.yes-btn {
+  padding: 18px 64px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-family: 'Playfair Display', serif;
+  color: var(--romantic-red);
+  background: var(--white);
+  border-radius: var(--radius-full);
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.yes-btn::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #FFB3BA, #FF6B9D, #E63946);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.yes-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 35px rgba(255, 255, 255, 0.4);
+}
+
+.yes-btn:active {
+  transform: scale(1.02);
+}
+
+/* Gentle pulsing glow on yes btn */
+.yes-btn {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 4px 20px rgba(255, 255, 255, 0.3); }
+  50% { box-shadow: 0 4px 35px rgba(255, 255, 255, 0.55), 0 0 60px rgba(255, 255, 255, 0.15); }
+}
+
+.no-btn {
+  padding: 12px 36px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 250ms var(--ease-smooth), left 250ms var(--ease-smooth), top 250ms var(--ease-smooth);
+  position: relative;
+  z-index: 5;
+}
+
+.no-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* When the No button is running from cursor */
+.no-btn.evading {
+  position: fixed;
+  transition: left 300ms var(--ease-bounce), top 300ms var(--ease-bounce);
+}
+
+/* "No option has left" message */
+.no-gone-msg {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 300;
+  opacity: 0;
+  transition: opacity var(--transition-slow);
+  min-height: 1.5em;
+}
+
+.no-gone-msg.visible {
+  opacity: 1;
+}
+
+/* ================================================================
+ *  PAGE 3 — CONGRATULATIONS
+ * ================================================================ */
+.congrats-page {
+  background: var(--gradient-celebration);
+  overflow-y: auto;
+  justify-content: flex-start;
+  padding: var(--space-2xl) var(--space-lg);
+}
+
+.congrats-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 1200px;
+  width: 100%;
+  animation: fadeInScale 800ms var(--ease-smooth) 300ms both;
+}
+
+.congrats-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.4rem, 8vw, 3.8rem);
+  font-weight: 600;
+  font-style: italic;
+  color: var(--warm-accent);
+  text-shadow: 0 2px 30px rgba(255, 107, 157, 0.4);
+  margin-bottom: var(--space-xl);
+}
+
+/* Sparkle decorations around heading */
+.congrats-heading .sparkle {
+  display: inline-block;
+  animation: sparkle 1.5s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+/* ── Envelope Prompt ───────────────────────────────────────── */
+.envelope-prompt {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: var(--space-lg);
+  animation: fadeIn 800ms var(--ease-smooth) 600ms both;
+}
+
+/* ── Envelope Component ───────────────────────────────────── */
+.envelope-wrapper {
+  cursor: pointer;
+  margin-bottom: var(--space-xl);
+  animation: fadeInScale 800ms var(--ease-smooth) 900ms both;
+  outline: none;
+}
+
+.envelope-wrapper:focus-visible {
+  outline: 2px solid var(--warm-accent);
+  outline-offset: 8px;
+  border-radius: var(--radius-md);
+}
+
+/* SVG sizing — smaller, icon-like proportions */
+.envelope-icon {
+  width: clamp(110px, 28vw, 160px);
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  transition: transform 400ms var(--ease-smooth),
+              filter 400ms var(--ease-smooth);
+  filter: drop-shadow(0 6px 20px rgba(230, 57, 70, 0.35));
+}
+
+.envelope-wrapper:hover .envelope-icon {
+  transform: translateY(-6px) scale(1.06);
+  filter: drop-shadow(0 10px 30px rgba(230, 57, 70, 0.5));
+}
+
+.envelope-wrapper:active .envelope-icon {
+  transform: translateY(-2px) scale(0.97);
+}
+
+/* SVG element fills and strokes */
+.env-body {
+  fill: #f8bbd0;
+  stroke: #5d1a2e;
+  stroke-width: 5;
+}
+
+.env-crease {
+  stroke: #5d1a2e;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+}
+
+.env-flap {
+  fill: #f48fb1;
+  stroke: #5d1a2e;
+  stroke-width: 5;
+  stroke-linejoin: round;
+}
+
+.env-heart {
+  fill: #e63946;
+  stroke: #5d1a2e;
+  stroke-width: 3;
+  stroke-linejoin: round;
+  animation: heartPulse 1.8s ease-in-out infinite;
+  transform-origin: 100px 60px;
+}
+
+@keyframes heartPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+/* Gentle floating animation for idle state */
+.envelope-wrapper:not(.opened) .envelope-icon {
+  animation: envelopeIdle 3s ease-in-out infinite;
+}
+
+@keyframes envelopeIdle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* ── Envelope Open State ───────────────────────────────────── */
+.envelope-wrapper.opened .envelope-icon {
+  animation: envelopeOpen 800ms var(--ease-smooth) forwards;
+}
+
+@keyframes envelopeOpen {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  30% { transform: translateY(-15px) scale(1.08); opacity: 1; }
+  100% { transform: translateY(-40px) scale(0.85); opacity: 0; }
+}
+
+/* Hides envelope once message is revealed */
+.envelope-wrapper.revealed {
+  max-height: 0;
+  margin: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: max-height 600ms var(--ease-smooth),
+              margin 600ms var(--ease-smooth),
+              opacity 400ms var(--ease-smooth);
+}
+
+/* Envelope prompt hidden */
+.envelope-prompt.hidden {
+  opacity: 0;
+  max-height: 0;
+  margin: 0;
+  overflow: hidden;
+  transition: opacity 300ms var(--ease-smooth),
+              max-height 400ms var(--ease-smooth) 200ms,
+              margin 400ms var(--ease-smooth) 200ms;
+}
+
+/* Message card */
+.message-card {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl) var(--space-xl);
+  text-align: left;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Hidden state for message card (before envelope is opened) */
+.message-card.hidden {
+  opacity: 0;
+  max-height: 0;
+  padding: 0 var(--space-xl);
+  margin: 0;
+  overflow: hidden;
+  border: none;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+/* Reveal animation for message card */
+.message-card.revealing {
+  animation: revealMessage 1000ms var(--ease-smooth) forwards;
+  max-height: 2000px;
+  overflow: visible;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+  pointer-events: auto;
+}
+
+@keyframes revealMessage {
+  0% {
+    opacity: 0;
+    padding: 0 var(--space-xl);
+    transform: translateY(30px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    padding: var(--space-xl);
+    transform: translateY(0) scale(1);
+  }
+}
+
+.message-card p {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.88);
+  margin-bottom: var(--space-lg);
+}
+
+.message-card p:last-child {
+  margin-bottom: 0;
+}
+
+.message-card .signature {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.7rem;
+  font-style: italic;
+  color: var(--warm-accent);
+  text-align: right;
+  margin-top: var(--space-xl);
+}
+
+/* Decorative divider */
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  margin: var(--space-xl) 0;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+.divider span {
+  font-size: 1.2rem;
+}
+
+/* Replay button */
+.replay-btn {
+  margin-top: var(--space-xl);
+  padding: 12px 32px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background var(--transition-fast),
+              color var(--transition-fast),
+              opacity 500ms var(--ease-smooth);
+}
+
+.replay-btn.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.replay-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ================================================================
+ *  STARFIELD CANVAS (Congrats page background)
+ * ================================================================ */
+#starfield-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+
+/* ================================================================
+ *  TYPEWRITER EFFECT
+ * ================================================================ */
+.typewriter-line {
+  opacity: 0;
+  transition: none;
+}
+
+.typewriter-line.typewriter-active {
+  opacity: 1;
+}
+
+/* Blinking cursor span injected by JS */
+.typewriter-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: var(--warm-accent);
+  vertical-align: text-bottom;
+  margin-left: 2px;
+  animation: cursorBlink 600ms step-end infinite;
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ================================================================
+ *  SIDE GALLERIES + MESSAGE ROW (Three-column layout)
+ * ================================================================ */
+.message-gallery-row {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-lg);
+  width: 100%;
+  max-width: 1200px;
+  animation: fadeInScale 800ms var(--ease-smooth) both;
+}
+
+.message-gallery-row.hidden {
+  opacity: 0;
+  pointer-events: none;
+  max-height: 0;
+  overflow: hidden;
+  margin: 0;
+}
+
+/* Message card takes center, flexible width */
+.message-gallery-row .message-card {
+  flex: 1 1 50%;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+}
+
+/* Side gallery containers */
+.side-gallery {
+  flex: 0 0 220px;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.25);
+  align-self: center;
+}
+
+.side-gallery-track {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+}
+
+/* Each slide is absolutely positioned; only the .active one is visible */
+.side-gallery-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.side-gallery-slide.active {
+  opacity: 1;
+}
+
+.side-gallery-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* ================================================================
+ *  CONFETTI CANVAS (overlay)
+ * ================================================================ */
+#confetti-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* ================================================================
+ *  SHARED ANIMATIONS
+ * ================================================================ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================================================================
+ *  REDUCED MOTION
+ * ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .floating-heart {
+    display: none;
+  }
+}
+
+/* ================================================================
+ *  RESPONSIVE — Tablet
+ * ================================================================ */
+@media (max-width: 768px) {
+  .captcha-container {
+    padding: var(--space-lg);
+    max-width: 360px;
+  }
+
+  .captcha-header {
+    margin: calc(var(--space-lg) * -1) calc(var(--space-lg) * -1) var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .proposal-content {
+    padding: var(--space-lg);
+  }
+
+  .message-card {
+    padding: var(--space-lg);
+  }
+
+  .congrats-page {
+    padding: var(--space-xl) var(--space-md);
+  }
+
+  .side-gallery {
+    flex: 0 0 160px;
+  }
+}
+
+/* ================================================================
+ *  RESPONSIVE — Mobile
+ * ================================================================ */
+@media (max-width: 480px) {
+  .captcha-container {
+    width: 95%;
+    max-width: 340px;
+    padding: var(--space-md);
+  }
+
+  .captcha-header {
+    margin: calc(var(--space-md) * -1) calc(var(--space-md) * -1) var(--space-md);
+  }
+
+  .captcha-grid {
+    gap: 4px;
+  }
+
+  .captcha-challenge {
+    font-size: 0.95rem;
+  }
+
+  .proposal-buttons {
+    gap: var(--space-md);
+  }
+
+  .yes-btn {
+    padding: 16px 48px;
+    font-size: 1.15rem;
+  }
+
+  .no-btn {
+    padding: 10px 28px;
+    font-size: 0.85rem;
+  }
+
+  .message-card {
+    padding: var(--space-md);
+  }
+
+  .message-card p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .congrats-page {
+    padding: var(--space-lg) var(--space-sm);
+  }
+
+  .message-gallery-row {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .side-gallery {
+    flex: none;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .side-gallery-track {
+    aspect-ratio: 4 / 3;
+  }
+}

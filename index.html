@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>I Love You 💟</title>
+  <meta name="description" content="I have an important question to ask you..." />
+
+  <!-- Preload captcha images for instant display -->
+  <link rel="preload" as="image" href="assets/captcha/boyfriend-1.jpg" />
+  <link rel="preload" as="image" href="assets/captcha/boyfriend-2.jpg" />
+  <link rel="preload" as="image" href="assets/captcha/boyfriend-3.jpg" />
+  <link rel="preload" as="image" href="assets/captcha/boyfriend-4.jpg" />
+  <link rel="preload" as="image" href="assets/captcha/other-1.jpg" />
+  <link rel="preload" as="image" href="assets/captcha/other-2.jpg" />
+  <link rel="preload" as="image" href="assets/captcha/other-3.jpg" />
+  <link rel="preload" as="image" href="assets/captcha/other-4.jpg" />
+  <link rel="preload" as="image" href="assets/captcha/other-5.jpg" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       PAGE 1 — CAPTCHA CHALLENGE
+       ═══════════════════════════════════════════════════════════ -->
+  <section id="captcha-page" class="page captcha-page active" aria-label="CAPTCHA verification">
+    <div class="captcha-container" id="captcha-container">
+
+      <!-- Header strip -->
+      <div class="captcha-header">
+        <h1>Please verify you are Marie</h1>
+        <p>Security check required to proceed</p>
+      </div>
+
+      <!-- Challenge prompt -->
+      <p class="captcha-challenge" id="captcha-challenge">
+        Select all squares containing<br>
+        <strong class="captcha-highlight">the love of your life</strong>
+      </p>
+
+      <!-- 3×3 Image Grid (populated by JS) -->
+      <div class="captcha-grid" id="captcha-grid" role="group" aria-label="Image selection grid">
+        <!-- Cells injected by script.js -->
+      </div>
+
+      <!-- Verify button -->
+      <button
+        type="button"
+        class="captcha-verify-btn"
+        id="captcha-verify-btn"
+        disabled
+        aria-label="Verify your selections"
+      >
+        Verify
+      </button>
+
+      <!-- Error message (text set dynamically by JS) -->
+      <p class="captcha-error" id="captcha-error" role="alert" aria-live="polite"></p>
+
+      <!-- Hint after 3 failures -->
+      <p class="captcha-hint" id="captcha-hint" aria-live="polite">
+        Hint: Look for the handsome fella
+      </p>
+
+      <!-- Playful footer -->
+      <div class="captcha-footer">
+        <div class="captcha-footer-brand">
+          <span class="heart-icon">💕</span>
+          <span>loveReCAPTCHA</span>
+        </div>
+        <div class="captcha-footer-links">
+          <a href="#" onclick="return false">Privacy</a>
+          <a href="#" onclick="return false">Terms</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       PAGE 2 — VALENTINE PROPOSAL
+       ═══════════════════════════════════════════════════════════ -->
+  <section id="proposal-page" class="page proposal-page" aria-label="Valentine proposal">
+
+    <!-- Floating hearts background (spawned by JS) -->
+    <div class="hearts-container" id="hearts-container" aria-hidden="true"></div>
+
+    <div class="proposal-content">
+      <h1 class="proposal-heading">Will you be my Valentine?</h1>
+      <p class="proposal-subtext">Please please please please please say yes</p>
+
+      <div class="proposal-buttons">
+        <button type="button" class="yes-btn" id="yes-btn" aria-label="Yes, I will be your Valentine">
+          Yes!
+        </button>
+        <button type="button" class="no-btn" id="no-btn" aria-label="No">
+          No...
+        </button>
+        <p class="no-gone-msg" id="no-gone-msg" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       PAGE 3 — CONGRATULATIONS
+       ═══════════════════════════════════════════════════════════ -->
+  <section id="congrats-page" class="page congrats-page" aria-label="Congratulations">
+    <!-- Twinkling starfield background -->
+    <canvas id="starfield-canvas" aria-hidden="true"></canvas>
+
+    <div class="congrats-content">
+
+      <h1 class="congrats-heading">
+        <span class="sparkle">✨</span>
+        Congratulations!
+        <span class="sparkle">✨</span>
+      </h1>
+
+      <div class="divider"><span>💌</span></div>
+
+      <!-- ═════════════════════════════════════════════════════
+           ENVELOPE — Click to reveal the message
+           ═════════════════════════════════════════════════════ -->
+      <p class="envelope-prompt" id="envelope-prompt">Open Me</p>
+      <div class="envelope-wrapper" id="envelope-wrapper" role="button" tabindex="0" aria-label="Open the love letter">
+        <svg class="envelope-icon" viewBox="0 0 200 145" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Envelope body -->
+          <rect class="env-body" x="5" y="5" width="190" height="135" rx="6" />
+          <!-- Diagonal fold lines (bottom corners → center) -->
+          <line class="env-crease" x1="5" y1="140" x2="100" y2="62" />
+          <line class="env-crease" x1="195" y1="140" x2="100" y2="62" />
+          <!-- Top flap (V pointing down) -->
+          <polygon class="env-flap" points="5,5 100,88 195,5" />
+          <!-- Heart wax seal -->
+          <path class="env-heart" d="M100,80 C100,80 83,60 83,51 C83,42 91,39 100,49 C109,39 117,42 117,51 C117,60 100,80 100,80 Z" />
+        </svg>
+      </div>
+
+      <!-- ═════════════════════════════════════════════════════
+           MESSAGE + SIDE GALLERIES — Three-column layout
+           ═════════════════════════════════════════════════════ -->
+      <div class="message-gallery-row hidden" id="message-gallery-row">
+
+        <!-- LEFT GALLERY — Photos 1-9 -->
+        <div class="side-gallery" id="gallery-left">
+          <div class="side-gallery-track" id="gallery-left-track">
+            <div class="side-gallery-slide active"><img src="assets/congrats-page/IMG_0636.jpg" alt="Our memory together" loading="lazy" /></div>
+            <div class="side-gallery-slide"><img src="assets/congrats-page/IMG_1664.jpg" alt="Our memory together" loading="lazy" /></div>
+            <div class="side-gallery-slide"><img src="assets/congrats-page/IMG_3063.jpg" alt="Our memory together" loading="lazy" /></div>
+            <div class="side-gallery-slide"><img src="assets/congrats-page/IMG_3089.jpg" alt="Our memory together" loading="lazy" /></div>
+            <div class="side-gallery-slide"><img src="assets/congrats-page/IMG_3189.jpg" alt="Our memory together" loading="lazy" /></div>
+            <div class="side-gallery-slide"><img src="assets/congrats-page/IMG_3440.jpg" alt="Our memory together" loading="lazy" /></div>
+            <div class="side-gallery-slide"><img src="assets/congrats-page/IMG_3534.jpg" alt="Our memory together" loading="lazy" /></div>
+            <div class="side-gallery-slide"><img src="assets/congrats-page/IMG_4057.jpg" alt="Our memory together" loading="lazy" /></div>
+            <div class="side-gallery-slide"><img src="assets/congrats-page/IMG_4628.jpg" alt="Our memory together" loading="lazy" /></div>
+          </div>
+        </div>
+
+        <!-- CENTER — Message card -->
+        <div class="message-card" id="message-card">
+          <p class="typewriter-line" data-typewriter>Well done, you are officially my valentine! 😘</p>
+          <p class="typewriter-line" data-typewriter>I love you more than you could ever know, you are my everything and I cant even begin to express how lucky I feel every single day I get to spend with you and kiss you and hug you and be your man.</p>
+          <p class="typewriter-line" data-typewriter>I love everything about you, and I cant wait to spend my life annoying you. You are the most inxredible person I've ever met and I could never ask for a better partner.</p>
+          <p class="typewriter-line" data-typewriter><em>Happy Valentine's Day my love</em></p>
+
+          <div class="divider typewriter-line" data-typewriter-instant><span>💟</span></div>
+
+          <p class="signature typewriter-line" data-typewriter>- Scroobrz</p>
+        </div>
+
+        <!-- RIGHT GALLERY — Photos 10-18 -->
+        <div class="side-gallery" id="gallery-right">
+          <div class="side-gallery-track" id="gallery-right-track">
+            <div class="side-gallery-slide active"><img src="assets/congrats-page/IMG_5031.jpg" alt="Our memory together" loading="lazy" /></div>
+            <div class="side-gallery-slide"><img src="assets/congrats-page/IMG_6867.jpg" alt="Our memory together" loading="lazy" /></div>
+            <div class="side-gallery-slide"><img src="assets/congrats-page/IMG_7379.jpg" alt="Our memory together" loading="lazy" /></div>
+            <div class="side-gallery-slide"><img src="assets/congrats-page/IMG_8006.jpg" alt="Our memory together" loading="lazy" /></div>
+            <div class="side-gallery-slide"><img src="assets/congrats-page/5D4C3D2A-30B5-4362-BF5A-06672535736A.jpg" alt="Our memory together" loading="lazy" /></div>
+            <div class="side-gallery-slide"><img src="assets/congrats-page/906DD20F-431D-48A5-9EA4-CD1314A16E7A.jpg" alt="Our memory together" loading="lazy" /></div>
+            <div class="side-gallery-slide"><img src="assets/congrats-page/BA178710-0A4B-4576-8589-60A15C48163C.jpg" alt="Our memory together" loading="lazy" /></div>
+            <div class="side-gallery-slide"><img src="assets/congrats-page/BD55FDB3-F148-4ED2-A0FF-C08153A48253.jpg" alt="Our memory together" loading="lazy" /></div>
+            <div class="side-gallery-slide"><img src="assets/congrats-page/DB01CA8B-594C-4514-99ED-503F04724F30.jpg" alt="Our memory together" loading="lazy" /></div>
+          </div>
+        </div>
+
+      </div>
+
+      <button type="button" class="replay-btn hidden" id="replay-btn" aria-label="Restart the experience">
+        Start over? 🔄
+      </button>
+    </div>
+  </section>
+
+  <!-- Confetti canvas (drawn by JS) -->
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+  <script src="script.js"></script>
+</body>
+</html>
